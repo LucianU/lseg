@@ -1,31 +1,19 @@
 import numpy as np
 
-
-class Model:
-    def __init__(self, data):
-        self.data = data
-
-    def predict(self):
-        pass
+from src.preprocessing import load_price_data
+from src.metrics import moving_average_baseline, evaluate_predictions
 
 
-def compute_moving_average(prices, window=5):
-    return prices.rolling(window=window).mean()
+def main():
+    df = load_price_data('../data/Price_History_2025.xlsx')
 
-def evaluate_model(predictions, actuals):
-    mae = np.mean(np.abs(predictions - actuals))
-    rmse = np.sqrt(np.mean((predictions - actuals) ** 2))
-    direction_acc = np.mean(np.sign(predictions.diff()) == np.sign(actuals.diff()))
-    return {'MAE': mae, 'RMSE': rmse, 'Directional Accuracy': direction_acc}
+    # Baseline prediction
+    predicted_prices = moving_average_baseline(df, window=5)
 
-def simulate_gbm():
-    pass
+    # Evaluate performance
+    metrics = evaluate_predictions(predicted_prices, df['Price'])
+    print(metrics)
 
-def fft_filter_and_predict():
-    pass
-
-def plot_results():
-    pass
 
 def output(prices):
     pass
