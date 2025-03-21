@@ -21,20 +21,6 @@ def extract_timeseries(df):
     time = np.arange(N)  # Simulated time index
     return time, prices
 
-def simulate_data():
-    # Generate synthetic price data with a mix of trends and oscillations
-    T = 200  # Number of time steps
-    t = np.linspace(0, 10, T)  # Time vector
-
-    # Simulated price = trend + oscillations + noise
-    simulated_price = (
-        50 + 2 * t  # Upward trend
-        + 5 * np.sin(2 * np.pi * 0.2 * t)  # Low-frequency oscillation
-        + 2 * np.sin(2 * np.pi * 1.5 * t)  # High-frequency oscillation
-        + np.random.normal(0, 1, T)  # Noise
-    )
-    return t, simulated_price
-
 def get_price_frequencies(prices):
     N = len(prices)  # Number of data points
     freqs = fftfreq(N)  # Frequency components
@@ -68,7 +54,6 @@ def plot_frequency_spectrum(freqs, fft_values):
     plt.grid()
     plt.show()
 
-
 def analyze_aapl():
     df = load_data(apple_data)
     df = preprocess_data(df)
@@ -80,4 +65,19 @@ def analyze_aapl():
 
 
 analyze_aapl()
+
+
+def simulate_data():
+    # Generate synthetic price data with a mix of trends and oscillations
+    T = 200  # Number of time steps
+    t = np.linspace(0, 10, T)  # Time vector
+
+    # Simulated price = trend + oscillations + noise
+    simulated_price = (
+        50 + 2 * t  # Upward trend
+        + 5 * np.sin(2 * np.pi * 0.2 * t)  # Low-frequency oscillation
+        + 2 * np.sin(2 * np.pi * 1.5 * t)  # High-frequency oscillation
+        + np.random.normal(0, 1, T)  # Noise
+    )
+    return t, simulated_price
 
