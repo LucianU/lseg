@@ -5,6 +5,7 @@ from lseg.preprocessing import load_price_data
 from lseg.models import simulate_gbm_paths, fft_predict, arima_predict
 from lseg.metrics import evaluate_predictions
 from lseg.plot_utils import plot_predictions, plot_gbm_band
+from lseg.out import save_predictions_csv
 
 
 def main():
@@ -13,7 +14,23 @@ def main():
     evaluate_gbm(df)
     evaluate_arima(df)
     evaluate_baseline(df)
-    evaluate_fft(df, plot=True)
+    evaluate_fft(df)
+
+    n_future = 5
+    gbm_preds, _ = simulate_gbm_paths(df, n_days=n_future)
+
+    # Reverse predictions too (to keep them aligned)
+    predicted_prices = gbm_preds[::-1].reset_index(drop=True)
+
+    future_dates = [
+    "16/11/2023",
+    "15/11/2023",
+    "14/11/2023",
+    "13/11/2023",
+    "10/11/2023"
+    ]
+
+    save_predictions_csv(predicted_prices, future_dates, './data/Iușan_Ursu.csv')
     #show_gbm_band(df)
 
 
