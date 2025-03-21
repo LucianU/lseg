@@ -23,11 +23,11 @@ def main():
     predicted_prices = gbm_preds[::-1].reset_index(drop=True)
 
     future_dates = [
-    "16/11/2023",
-    "15/11/2023",
-    "14/11/2023",
-    "13/11/2023",
-    "10/11/2023"
+        "16/11/2023",
+        "15/11/2023",
+        "14/11/2023",
+        "13/11/2023",
+        "10/11/2023"
     ]
 
     save_predictions_csv(predicted_prices, future_dates, './data/Iușan_Ursu.csv')
