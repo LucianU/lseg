@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy.fftpack import fft, ifft, fftfreq
+from statsmodels.tsa.arima.model import ARIMA
 
 
 def simulate_gbm_paths(
@@ -34,7 +35,11 @@ def simulate_gbm_paths(
     return pd.Series(mean_forecast), simulated_paths
 
 
-def fft_predict(prices: pd.Series, n_future: int = 5, n_freq: int = 5) -> pd.Series:
+def fft_predict(
+    prices: pd.Series,
+    n_future: int = 5,
+    n_freq: int = 5
+) -> pd.Series:
     """
     Predicts future prices using FFT by extrapolating dominant frequency components.
 
@@ -71,4 +76,26 @@ def fft_predict(prices: pd.Series, n_future: int = 5, n_freq: int = 5) -> pd.Ser
     predicted = [reconstructed[-1] + i * delta for i in range(1, n_future + 1)]
 
     return pd.Series(predicted)
+
+
+def arima_predict(
+    prices: pd.Series,
+    n_future: int = 5,
+    order: tuple = (3, 1, 2)
+) -> pd.Series:
+    """
+    Predicts future prices using a fixed ARIMA model.
+
+    Args:
+        prices: Historical price series (1D).
+        n_future: How many steps to forecast.
+        order: ARIMA order (p, d, q), default from auto_arima result.
+
+    Returns:
+        pd.Series of predicted prices.
+    """
+    model = ARIMA(prices, order=order)
+    arima_model = model.fit()
+    forecast = arima_model.forecast(steps=n_future)
+    return pd.Series(forecast.values)
 
