@@ -11,6 +11,7 @@ from lseg.out import save_predictions_csv
 def main():
     df = load_price_data('./data/Price_History_2025.xlsx')
 
+    evaluate_ensemble(df)
     evaluate_gbm(df)
     evaluate_arima(df)
     evaluate_baseline(df)
@@ -30,7 +31,7 @@ def main():
         "10/11/2023"
     ]
 
-    save_predictions_csv(predicted_prices, future_dates, './data/Iușan_Ursu.csv')
+    #save_predictions_csv(predicted_prices, future_dates, './data/Iușan_Ursu.csv')
     #show_gbm_band(df)
 
 
@@ -84,6 +85,21 @@ def evaluate_arima(df, plot=False):
 
     if plot:
         plot_predictions(arima_preds, true_future, title="ARIMA: Prediction vs Actual")
+
+def evaluate_ensemble(df, plot=False):
+    n_future = 5
+    train_df = df.iloc[:-n_future].copy()
+    true_future = df['Price'].iloc[-n_future:].reset_index(drop=True)
+
+    gbm_preds, _ = simulate_gbm_paths(train_df, n_days=n_future)
+    arima_preds = arima_predict(train_df['Price'], n_future=n_future)
+
+    ensemble_preds = (gbm_preds + arima_preds) / 2
+    ensemble_metrics = evaluate_predictions(ensemble_preds, true_future)
+    print("Ensemble Metrics:", ensemble_metrics)
+
+    if plot:
+        plot_predictions(ensemble_preds, true_future, title="Ensemble: GBM + ARIMA")
 
 def evaluate_fft(df, plot=False):
     # Step 1: Choose split point
