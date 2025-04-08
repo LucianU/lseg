@@ -1,5 +1,9 @@
 from lseg.preprocessing import load_price_data
-from lseg.evals import evaluate_ensemble, evaluate_gbm, evaluate_arima, evaluate_baseline, evaluate_fft
+from lseg.evals import (evaluate_ensemble,
+                        evaluate_gbm,
+                        evaluate_arima,
+                        evaluate_fft,
+                        evaluate_baseline)
 
 
 def main():
