@@ -38,7 +38,6 @@ def simulate_gbm_paths(
 def fft_predict(
     prices: pd.Series,
     n_future: int = 5,
-    n_freq: int = 5
 ) -> pd.Series:
     """
     Predicts future prices using FFT by extrapolating dominant frequency components.
@@ -46,11 +45,12 @@ def fft_predict(
     Args:
         prices: pd.Series of historical prices.
         n_future: Number of days to predict.
-        n_freq: Number of dominant frequencies to keep.
 
     Returns:
         pd.Series of predicted prices (length = n_future).
     """
+    n_freq = 5
+
     N = len(prices)
     prices_centered = prices - prices.mean()
 
